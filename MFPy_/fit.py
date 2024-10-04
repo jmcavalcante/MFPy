@@ -160,7 +160,7 @@ class Fit:
 
         for csv_file in glob.glob(os.path.join(folder, '*.csv')):
             name_file = os.path.basename(csv_file)
-            data = pd.read_csv(csv_file)
+            data = pd.read_csv(csv_file,sep=';').sort_values(by='SA')
             index = name_file.find('_gamma')
             Fz_list.append(float(name_file[2:index]))
             gamma_list.append(float(name_file[index + len('_gamma'):-4]))
