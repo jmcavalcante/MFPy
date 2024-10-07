@@ -1,7 +1,8 @@
 import numpy as np
+from collections import namedtuple
+import copy
 
 class PreProcessing:
-    @staticmethod
     def read_tir(tir_file):
         headers = {}
         current_header = None
@@ -183,7 +184,7 @@ class PreProcessing:
         kappa_max,kappa_min = headers['LONG_SLIP_RANGE']['KPUMAX'],headers['LONG_SLIP_RANGE']['KPUMIN']
         gamma_max,gamma_min = headers['INCLINATION_ANGLE_RANGE']['CAMMAX'],headers['INCLINATION_ANGLE_RANGE']['CAMMIN']
 
-        input_lim = input
+        input_lim = input.copy()
 
         lim_list = [[alpha_max,alpha_min],[kappa_max,kappa_min],[gamma_max,gamma_min],[Fz_max,Fz_min]]
         name = ['alpha','kappa','gamma','Fz']
@@ -237,6 +238,3 @@ class PreProcessing:
         
         return nominal,Fx_pure_values,Fy_pure_values,Mz_pure_values,Fx_combined_values,Fy_combined_values,Mz_combined_values,My_values,Mx_values
     
-    def output_structure():
-        output = {"alpha":[],"kappa":[],'gamma':[],'VX':[],"FX":[],"FY":[],'muX':[],'muY':[],'FZ':[],'MX':[],'MY':[],'MZ':[],'t':[],'s':[],'FX0':[],'FY0':[],'MZ0':[],'MZr0':[],'t0':[]}
-        return output

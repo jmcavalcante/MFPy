@@ -372,7 +372,7 @@ class Pacejka:
         This function will calculate My rolling resistance torque :
         """
         Fz,Vx = Fz_Vx
-        Fx, Bxalpha = Fx_output
+        Fx, Gxalpha = Fx_output
         lambda_My = 1
 
         My = -Fz*R0*(qsy1 + qsy2*Fx/Fz0_ + qsy3*abs(Vx/V0) + qsy4*(Vx/V0)**4)*lambda_My #(11.E70)
@@ -385,7 +385,7 @@ class Pacejka:
         This function will calculate Mx overturning torque :
         """
         gamma,Fz,Vx = gamma_Fz_Vx
-        Fy, Bxalpha = Fy_output
+        Fy, Gyalpha = Fy_output
         lambda_Mx = 1
 
         Mx = Fz*R0*(qsx1 - qsx2*gamma + qsx3*Fy/Fz0_)*lambda_Mx #(4.E69)
