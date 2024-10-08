@@ -134,9 +134,12 @@ class Fit:
 
         if full_output == 2:
             Fy_initial = Pacejka.Fy_pure((alpha_data,gamma_data,Fz_data),*initial_guess,Fz_nom)[0].ravel()
+            Fz_data_output = [i[0] for i in Fz_data]
+            Fy_data_output = [Fy_data[i:i+size] for i in range(0,len(Fy_data),size)]
+            Fy_initial_output = [Fy_initial[i:i+size] for i in range(0,len(Fy_initial),size)]
             Fy_fit = Pacejka.Fy_pure((alpha_data,gamma_data,Fz_data),*p_fit,Fz_nom)[0].ravel()
-
-            return p_fit,initial_guess,Fz_nom,Fz_data,Fy_data,alpha_data,gamma_data,Fy_initial,Fy_fit
+            Fy_fit_output = [Fy_fit[i:i+size] for i in range(0,len(Fy_fit),size)]
+            return p_fit,initial_guess,Fz_nom,Fz_data_output,Fy_data_output,alpha_data,gamma_data,Fy_initial_output,Fy_fit_output
         
         elif full_output == 1:
             return p_fit,initial_guess,Fz_nom
