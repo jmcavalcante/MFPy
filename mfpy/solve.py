@@ -2,16 +2,16 @@ from .equations import Pacejka
 from .preprocess import PreProcessing
 from collections import namedtuple
 
-def solve(input_values,header,check_limits=False):
+def solve(input_values,header,check_limits=False,no_warnings=False):
 
-    header_checked = PreProcessing.check_coeff(header) #Check the necessary parameters in the tir file
+    header_checked = PreProcessing.check_coeff(header,no_warnings) #Check the necessary parameters in the tir file
 
     PreProcessing.check_input_size(input_values) #Check input len
 
     output = namedtuple('MFOutput',["alpha","kappa",'gamma','VX',"FX","FY",'muX','muY','FZ','MX','MY','MZ','t','s','FX0','FY0','MZ0','MZr0','t0','Re','rho','omega'])
     
     if check_limits == True:
-        input_final = PreProcessing.check_limits(header_checked,input_values) #Limitating the input using the tir file parameter
+        input_final = PreProcessing.check_limits(header_checked,input_values,no_warnings) #Limitating the input using the tir file parameter
     else:
         input_final = input_values
     alpha_input,kappa_input,gamma_input,Fz_input,Vx_input = input_values #Initial values (input user)
