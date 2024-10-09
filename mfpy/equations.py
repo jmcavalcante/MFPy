@@ -392,3 +392,17 @@ class Pacejka:
 
         return [Mx]
 
+    def Radius(Fz_Vx,Cz,B,D,F,Fz0_,R0):
+        """
+    This function will calculate the deflection, the effective rolling radius and the omega (rotational speed of the tire):
+    """
+        Fz,Vx = Fz_Vx
+        rho = Fz/Cz
+        rho_Fz0 = Fz0_/Cz
+        rho_d = rho/rho_Fz0
+
+        Re = R0 - rho_Fz0*(D*np.arctan(B*rho_d) + F*rho_d)
+
+        omega = Vx/Re
+
+        return Re,rho,omega
