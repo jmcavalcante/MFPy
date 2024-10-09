@@ -1,5 +1,4 @@
 import numpy as np
-import copy
 
 class PreProcessing:
     def read_tir(tir_file):
