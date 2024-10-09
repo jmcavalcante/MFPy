@@ -18,10 +18,10 @@ class PreProcessing:
                     current_header = line[1:-1]
                     headers[current_header] = {}
                 else:
-                        if line.startswith('!'):
+                        if line.startswith('!') or line.startswith("'") or line.startswith("{"):
                             continue
                         if '$' in line and not line.startswith('$'):
-                            key_value,comment = line.split('$')
+                            key_value,comment = line.split('$',1)
                             key, value = key_value.split('=')
                             headers[current_header][key.strip()] = value.strip()
                         elif '=' in line:
@@ -210,8 +210,13 @@ class PreProcessing:
     def creating_coefs(headers):
         nominal = {'V0':headers['MODEL']['LONGVL'],'FZ0':headers['VERTICAL']['FNOMIN'],'R0':headers['DIMENSION']['UNLOADED_RADIUS']}
 
+        Radius_keys = ['VERTICAL_STIFFNESS','BREFF','DREFF','FREFF']
+        Radius_values = [headers['VERTICAL'][key] for key in Radius_keys]
+
+
         Fx_pure_keys = ['PCX1','PDX1','PDX2','PEX1','PEX2','PEX3','PEX4','PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2']
         Fx_pure_values = [headers['LONGITUDINAL_COEFFICIENTS'][key] for key in Fx_pure_keys]
+
 
         Fy_pure_keys = ['PCY1','PDY1','PDY2','PDY3','PEY1','PEY2','PEY3','PEY4','PEY5','PKY1','PKY2','PKY3','PKY4','PKY5','PKY6','PKY7',
                         'PHY1','PHY2','PVY1','PVY2','PVY3','PVY4']
@@ -236,5 +241,19 @@ class PreProcessing:
         Mx_keys = ['QSX1','QSX2','QSX3']
         Mx_values = [headers['OVERTURNING_COEFFICIENTS'][key] for key in Mx_keys]
         
-        return nominal,Fx_pure_values,Fy_pure_values,Mz_pure_values,Fx_combined_values,Fy_combined_values,Mz_combined_values,My_values,Mx_values
-    
+        return nominal,Radius_values,Fx_pure_values,Fy_pure_values,Mz_pure_values,Fx_combined_values,Fy_combined_values,Mz_combined_values,My_values,Mx_values
+
+    def write_tir(tir_file, headers):
+        try:
+            with open(tir_file, 'w') as file:
+                for header, values in headers.items():
+                    file.write('$---------------------------------------------------------------------'+header+'\n')
+                    file.write(f'[{header}]\n')
+                    for key, value in values.items():
+                        if isinstance(value, float):
+                            file.write(f'{key} = {value}\n')
+                        else:
+                            file.write(f'{key} = {value}\n')
+        except Exception as e:
+            print('Error writing the .tir file')
+            raise
