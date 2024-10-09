@@ -1,5 +1,4 @@
 import numpy as np
-from collections import namedtuple
 import copy
 
 class PreProcessing:
