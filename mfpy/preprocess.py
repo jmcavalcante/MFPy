@@ -1,4 +1,13 @@
 import numpy as np
+import sys
+import os
+class NoWarnings:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
 
 class PreProcessing:
     def read_tir(tir_file):
@@ -39,7 +48,7 @@ class PreProcessing:
             raise
 
     @staticmethod
-    def check_coeff(headers):
+    def check_coeff(headers,no_warnings=False):
         headers_checked = headers
         ##keys:
         model_keys = ['VXLOW']
@@ -76,95 +85,185 @@ class PreProcessing:
         overturning_keys = ['QSX1','QSX2','QSX3']
         
         rolling_keys = ['QSY1','QSY2','QSY3']
+        if no_warnings:
+            with NoWarnings():
+                if model_keys[0] not in headers['MODEL']:
+                    print('Speed. {}  does not exist. It will replaced by 10 m/s'.format(model_keys[0]))
+                    headers_checked['MODEL'][i] = 10
 
-        if model_keys[0] not in headers['MODEL']:
-            print('Speed. {}  does not exist. It will replaced by 10 m/s'.format(model_keys[0]))
-            headers_checked['MODEL'][i] = 10
+                if dimension_keys[0] not in headers['DIMENSION']:
+                    print('Unloaded radius. {}  does not exist. It will replaced by 0.3 m'.format(dimension_keys[0]))
+                    headers_checked['MODEL'][i] = 10
+                
+                if long_slip_keys[0] not in headers['LONG_SLIP_RANGE']:
+                    print('Slip ratio min. {}  does not exist. It will replaced by -1'.format(long_slip_keys[0]))
+                    headers_checked['MODEL'][i] = -1
+                if long_slip_keys[1] not in headers['LONG_SLIP_RANGE']:
+                    print('Slip ratio max. {}  does not exist. It will replaced by 1'.format(long_slip_keys[1]))
+                    headers_checked['MODEL'][i] = 1
 
-        if dimension_keys[0] not in headers['DIMENSION']:
-            print('Unloaded radius. {}  does not exist. It will replaced by 0.3 m'.format(dimension_keys[0]))
-            headers_checked['MODEL'][i] = 10
-        
-        if long_slip_keys[0] not in headers['LONG_SLIP_RANGE']:
-            print('Slip ratio min. {}  does not exist. It will replaced by -1'.format(long_slip_keys[0]))
-            headers_checked['MODEL'][i] = -1
-        if long_slip_keys[1] not in headers['LONG_SLIP_RANGE']:
-            print('Slip ratio max. {}  does not exist. It will replaced by 1'.format(long_slip_keys[1]))
-            headers_checked['MODEL'][i] = 1
+                if slip_angle_keys[0] not in headers['SLIP_ANGLE_RANGE']:
+                    print('Slip angle min. {}  does not exist. It will replaced by -0.5'.format(slip_angle_keys[0]))
+                    headers_checked['MODEL'][i] = -0.5
+                if slip_angle_keys[1] not in headers['SLIP_ANGLE_RANGE']:
+                    print('Slip angle max. {}  does not exist. It will replaced by 0.5'.format(slip_angle_keys[1]))
+                    headers_checked['MODEL'][i] = 0.5
+                
+                if inclination_angle_keys[0] not in headers['INCLINATION_ANGLE_RANGE']:
+                    print('Inclination angle min. {}  does not exist. It will replaced by -0.5'.format(inclination_angle_keys[0]))
+                    headers_checked['MODEL'][i] = -0.5
+                if inclination_angle_keys[1] not in headers['INCLINATION_ANGLE_RANGE']:
+                    print('Inclination angle max. {}  does not exist. It will replaced by 0.5'.format(inclination_angle_keys[1]))
+                    headers_checked['MODEL'][i] = 0.5
 
-        if slip_angle_keys[0] not in headers['SLIP_ANGLE_RANGE']:
-            print('Slip angle min. {}  does not exist. It will replaced by -0.5'.format(slip_angle_keys[0]))
-            headers_checked['MODEL'][i] = -0.5
-        if slip_angle_keys[1] not in headers['SLIP_ANGLE_RANGE']:
-            print('Slip angle max. {}  does not exist. It will replaced by 0.5'.format(slip_angle_keys[1]))
-            headers_checked['MODEL'][i] = 0.5
-        
-        if inclination_angle_keys[0] not in headers['INCLINATION_ANGLE_RANGE']:
-            print('Inclination angle min. {}  does not exist. It will replaced by -0.5'.format(inclination_angle_keys[0]))
-            headers_checked['MODEL'][i] = -0.5
-        if inclination_angle_keys[1] not in headers['INCLINATION_ANGLE_RANGE']:
-            print('Inclination angle max. {}  does not exist. It will replaced by 0.5'.format(inclination_angle_keys[1]))
-            headers_checked['MODEL'][i] = 0.5
+                if vertical_force_keys[0] not in headers['VERTICAL_FORCE_RANGE']:
+                    print('Fz min. {}  does not exist. It will replaced by 10 N'.format(inclination_angle_keys[0]))
+                    headers_checked['MODEL'][i] = 10
+                if vertical_force_keys[1] not in headers['VERTICAL_FORCE_RANGE']:
+                    print('Fz max. {}  does not exist. It will replaced by 10000N'.format(inclination_angle_keys[1]))
+                    headers_checked['MODEL'][i] = 10000
+                
+                if vertical_keys[0] not in headers['VERTICAL']:
+                    print('Nonimal load. {}  does not exist. It will replaced by 5000 N'.format(vertical_keys[0]))
+                    headers_checked['MODEL'][i] = 5000
+                if vertical_keys[1] not in headers['VERTICAL']:
+                    print('Vertical stifness. {}  does not exist. It will replaced by 300000'.format(vertical_keys[1]))
+                    headers_checked['MODEL'][i] = 300000
+                if vertical_keys[2] not in headers['VERTICAL']:
+                    print('Vertical damping. {}  does not exist. It will replaced by 50'.format(vertical_keys[2]))
+                    headers_checked['MODEL'][i] = 50
+                if vertical_keys[3] not in headers['VERTICAL']:
+                    print('BREFF. {}  does not exist. It will replaced by 10'.format(vertical_keys[3]))
+                    headers_checked['MODEL'][i] = 10
+                if vertical_keys[4] not in headers['VERTICAL']:
+                    print('DREFF. {}  does not exist. It will replaced by 0.3'.format(vertical_keys[4]))
+                    headers_checked['MODEL'][i] = 0.3
+                if vertical_keys[5] not in headers['VERTICAL']:
+                    print('FREFF. {}  does not exist. It will replaced by 0.1'.format(vertical_keys[5]))
+                    headers_checked['MODEL'][i] = 0.1
 
-        if vertical_force_keys[0] not in headers['VERTICAL_FORCE_RANGE']:
-            print('Fz min. {}  does not exist. It will replaced by 10 N'.format(inclination_angle_keys[0]))
-            headers_checked['MODEL'][i] = 10
-        if vertical_force_keys[1] not in headers['VERTICAL_FORCE_RANGE']:
-            print('Fz max. {}  does not exist. It will replaced by 10000N'.format(inclination_angle_keys[1]))
-            headers_checked['MODEL'][i] = 10000
-        
-        if vertical_keys[0] not in headers['VERTICAL']:
-            print('Nonimal load. {}  does not exist. It will replaced by 5000 N'.format(vertical_keys[0]))
-            headers_checked['MODEL'][i] = 5000
-        if vertical_keys[1] not in headers['VERTICAL']:
-            print('Vertical stifness. {}  does not exist. It will replaced by 300000'.format(vertical_keys[1]))
-            headers_checked['MODEL'][i] = 300000
-        if vertical_keys[2] not in headers['VERTICAL']:
-            print('Vertical damping. {}  does not exist. It will replaced by 50'.format(vertical_keys[2]))
-            headers_checked['MODEL'][i] = 50
-        if vertical_keys[3] not in headers['VERTICAL']:
-            print('BREFF. {}  does not exist. It will replaced by 10'.format(vertical_keys[3]))
-            headers_checked['MODEL'][i] = 10
-        if vertical_keys[4] not in headers['VERTICAL']:
-            print('DREFF. {}  does not exist. It will replaced by 0.3'.format(vertical_keys[4]))
-            headers_checked['MODEL'][i] = 0.3
-        if vertical_keys[5] not in headers['VERTICAL']:
-            print('FREFF. {}  does not exist. It will replaced by 0.1'.format(vertical_keys[5]))
-            headers_checked['MODEL'][i] = 0.1
+                for i in scaling_keys:
+                    if i not in headers['SCALING_COEFFICIENTS']:
+                        print('scalling coef. {}  does not exist. It will replaced by 1'.format(i))
+                        headers_checked['SCALING_COEFFICIENTS'][i] = 1         
 
-        for i in scaling_keys:
-            if i not in headers['SCALING_COEFFICIENTS']:
-                print('scalling coef. {}  does not exist. It will replaced by 1'.format(i))
-                headers_checked['SCALING_COEFFICIENTS'][i] = 1         
+                for i in longitudinal_keys:
+                    if i not in headers['LONGITUDINAL_COEFFICIENTS']:
+                        print('longitudinal coef. {} does not exist. It will replaced by 0'.format(i))
+                        headers_checked['LONGITUDINAL_COEFFICIENTS'][i] = 0      
 
-        for i in longitudinal_keys:
-            if i not in headers['LONGITUDINAL_COEFFICIENTS']:
-                print('longitudinal coef. {} does not exist. It will replaced by 0'.format(i))
-                headers_checked['LONGITUDINAL_COEFFICIENTS'][i] = 0      
+                for i in lateral_keys:
+                    if i not in headers['LATERAL_COEFFICIENTS']:
+                        if i == 'PKY4':
+                            print('lateral coef. {} does not exist. It will replaced by 2'.format(i))
+                            headers_checked['LATERAL_COEFFICIENTS'][i] = 2
+                        else:
+                            print('lateral coef. {} does not exist. It will replaced by 0'.format(i))
+                            headers_checked['LATERAL_COEFFICIENTS'][i] = 0
 
-        for i in lateral_keys:
-            if i not in headers['LATERAL_COEFFICIENTS']:
-                if i == 'PKY4':
-                    print('lateral coef. {} does not exist. It will replaced by 2'.format(i))
-                    headers_checked['LATERAL_COEFFICIENTS'][i] = 2
-                else:
-                    print('lateral coef. {} does not exist. It will replaced by 0'.format(i))
-                    headers_checked['LATERAL_COEFFICIENTS'][i] = 0
+                for i in aligning_keys:
+                    if i not in headers['ALIGNING_COEFFICIENTS']:
+                        print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                        headers_checked['ALIGNING_COEFFICIENTS'][i] = 0
 
-        for i in aligning_keys:
-            if i not in headers['ALIGNING_COEFFICIENTS']:
-                print('aligning coef. {} not exist. It will replaced by 0'.format(i))
-                headers_checked['ALIGNING_COEFFICIENTS'][i] = 0
+                for i in overturning_keys:
+                    if i not in headers['OVERTURNING_COEFFICIENTS']:
+                        print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                        headers_checked['OVERTURNING_COEFFICIENTS'][i] = 0
+                    
+                for i in rolling_keys:
+                    if i not in headers['ROLLING_COEFFICIENTS']:
+                        print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                        headers_checked['ROLLING_COEFFICIENTS'][i] = 0               
+        else:
+            if model_keys[0] not in headers['MODEL']:
+                    print('Speed. {}  does not exist. It will replaced by 10 m/s'.format(model_keys[0]))
+                    headers_checked['MODEL'][i] = 10
 
-        for i in overturning_keys:
-            if i not in headers['OVERTURNING_COEFFICIENTS']:
-                print('aligning coef. {} not exist. It will replaced by 0'.format(i))
-                headers_checked['OVERTURNING_COEFFICIENTS'][i] = 0
-             
-        for i in rolling_keys:
-            if i not in headers['ROLLING_COEFFICIENTS']:
-                print('aligning coef. {} not exist. It will replaced by 0'.format(i))
-                headers_checked['ROLLING_COEFFICIENTS'][i] = 0               
+            if dimension_keys[0] not in headers['DIMENSION']:
+                print('Unloaded radius. {}  does not exist. It will replaced by 0.3 m'.format(dimension_keys[0]))
+                headers_checked['MODEL'][i] = 10
+            
+            if long_slip_keys[0] not in headers['LONG_SLIP_RANGE']:
+                print('Slip ratio min. {}  does not exist. It will replaced by -1'.format(long_slip_keys[0]))
+                headers_checked['MODEL'][i] = -1
+            if long_slip_keys[1] not in headers['LONG_SLIP_RANGE']:
+                print('Slip ratio max. {}  does not exist. It will replaced by 1'.format(long_slip_keys[1]))
+                headers_checked['MODEL'][i] = 1
+
+            if slip_angle_keys[0] not in headers['SLIP_ANGLE_RANGE']:
+                print('Slip angle min. {}  does not exist. It will replaced by -0.5'.format(slip_angle_keys[0]))
+                headers_checked['MODEL'][i] = -0.5
+            if slip_angle_keys[1] not in headers['SLIP_ANGLE_RANGE']:
+                print('Slip angle max. {}  does not exist. It will replaced by 0.5'.format(slip_angle_keys[1]))
+                headers_checked['MODEL'][i] = 0.5
+            
+            if inclination_angle_keys[0] not in headers['INCLINATION_ANGLE_RANGE']:
+                print('Inclination angle min. {}  does not exist. It will replaced by -0.5'.format(inclination_angle_keys[0]))
+                headers_checked['MODEL'][i] = -0.5
+            if inclination_angle_keys[1] not in headers['INCLINATION_ANGLE_RANGE']:
+                print('Inclination angle max. {}  does not exist. It will replaced by 0.5'.format(inclination_angle_keys[1]))
+                headers_checked['MODEL'][i] = 0.5
+
+            if vertical_force_keys[0] not in headers['VERTICAL_FORCE_RANGE']:
+                print('Fz min. {}  does not exist. It will replaced by 10 N'.format(inclination_angle_keys[0]))
+                headers_checked['MODEL'][i] = 10
+            if vertical_force_keys[1] not in headers['VERTICAL_FORCE_RANGE']:
+                print('Fz max. {}  does not exist. It will replaced by 10000N'.format(inclination_angle_keys[1]))
+                headers_checked['MODEL'][i] = 10000
+            
+            if vertical_keys[0] not in headers['VERTICAL']:
+                print('Nonimal load. {}  does not exist. It will replaced by 5000 N'.format(vertical_keys[0]))
+                headers_checked['MODEL'][i] = 5000
+            if vertical_keys[1] not in headers['VERTICAL']:
+                print('Vertical stifness. {}  does not exist. It will replaced by 300000'.format(vertical_keys[1]))
+                headers_checked['MODEL'][i] = 300000
+            if vertical_keys[2] not in headers['VERTICAL']:
+                print('Vertical damping. {}  does not exist. It will replaced by 50'.format(vertical_keys[2]))
+                headers_checked['MODEL'][i] = 50
+            if vertical_keys[3] not in headers['VERTICAL']:
+                print('BREFF. {}  does not exist. It will replaced by 10'.format(vertical_keys[3]))
+                headers_checked['MODEL'][i] = 10
+            if vertical_keys[4] not in headers['VERTICAL']:
+                print('DREFF. {}  does not exist. It will replaced by 0.3'.format(vertical_keys[4]))
+                headers_checked['MODEL'][i] = 0.3
+            if vertical_keys[5] not in headers['VERTICAL']:
+                print('FREFF. {}  does not exist. It will replaced by 0.1'.format(vertical_keys[5]))
+                headers_checked['MODEL'][i] = 0.1
+
+            for i in scaling_keys:
+                if i not in headers['SCALING_COEFFICIENTS']:
+                    print('scalling coef. {}  does not exist. It will replaced by 1'.format(i))
+                    headers_checked['SCALING_COEFFICIENTS'][i] = 1         
+
+            for i in longitudinal_keys:
+                if i not in headers['LONGITUDINAL_COEFFICIENTS']:
+                    print('longitudinal coef. {} does not exist. It will replaced by 0'.format(i))
+                    headers_checked['LONGITUDINAL_COEFFICIENTS'][i] = 0      
+
+            for i in lateral_keys:
+                if i not in headers['LATERAL_COEFFICIENTS']:
+                    if i == 'PKY4':
+                        print('lateral coef. {} does not exist. It will replaced by 2'.format(i))
+                        headers_checked['LATERAL_COEFFICIENTS'][i] = 2
+                    else:
+                        print('lateral coef. {} does not exist. It will replaced by 0'.format(i))
+                        headers_checked['LATERAL_COEFFICIENTS'][i] = 0
+
+            for i in aligning_keys:
+                if i not in headers['ALIGNING_COEFFICIENTS']:
+                    print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                    headers_checked['ALIGNING_COEFFICIENTS'][i] = 0
+
+            for i in overturning_keys:
+                if i not in headers['OVERTURNING_COEFFICIENTS']:
+                    print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                    headers_checked['OVERTURNING_COEFFICIENTS'][i] = 0
+                
+            for i in rolling_keys:
+                if i not in headers['ROLLING_COEFFICIENTS']:
+                    print('aligning coef. {} not exist. It will replaced by 0'.format(i))
+                    headers_checked['ROLLING_COEFFICIENTS'][i] = 0
         return headers_checked
 
     @staticmethod
@@ -175,7 +274,7 @@ class PreProcessing:
             raise ValueError('Inputs with differents sizes.')
 
     @staticmethod
-    def check_limits(headers,input):
+    def check_limits(headers,input,no_warnings=False):
 
         Fz_max,Fz_min = headers['VERTICAL_FORCE_RANGE']['FZMAX'],headers['VERTICAL_FORCE_RANGE']['FZMIN']
         alpha_max,alpha_min = headers['SLIP_ANGLE_RANGE']['ALPMAX'],headers['SLIP_ANGLE_RANGE']['ALPMIN']
@@ -186,22 +285,41 @@ class PreProcessing:
 
         lim_list = [[alpha_max,alpha_min],[kappa_max,kappa_min],[gamma_max,gamma_min],[Fz_max,Fz_min]]
         name = ['alpha','kappa','gamma','Fz']
-        for i in range(4):
-            if isinstance(input_lim[i],(int,float)):
-                if input_lim[i] < lim_list[i][1]:
-                    print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
-                    input_lim[i] = lim_list[i][1]
-                elif input_lim[i] > lim_list[i][1]:
-                    print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
-                    input_lim[i] = lim_list[i][0]
-            elif isinstance(input_lim[i],(list,np.ndarray)):
-                input_lim[i] = np.array(input_lim[i])
-                if np.all((lim_list[i][1] < input[i]) & (lim_list[i][0] > input[i])) == False:
-                    print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
-                input_lim[i][input_lim[i] < lim_list[i][1]] = lim_list[i][1]
-                input_lim[i][input_lim[i] > lim_list[i][0]] = lim_list[i][0]
-            else:
-                raise TypeError("Inputs should be list, np.ndarray, float or int")
+        if no_warnings:
+            with NoWarnings():
+                for i in range(4):
+                    if isinstance(input_lim[i],(int,float)):
+                        if input_lim[i] < lim_list[i][1]:
+                            print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                            input_lim[i] = lim_list[i][1]
+                        elif input_lim[i] > lim_list[i][1]:
+                            print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                            input_lim[i] = lim_list[i][0]
+                    elif isinstance(input_lim[i],(list,np.ndarray)):
+                        input_lim[i] = np.array(input_lim[i])
+                        if np.all((lim_list[i][1] < input[i]) & (lim_list[i][0] > input[i])) == False:
+                            print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                        input_lim[i][input_lim[i] < lim_list[i][1]] = lim_list[i][1]
+                        input_lim[i][input_lim[i] > lim_list[i][0]] = lim_list[i][0]
+                    else:
+                        raise TypeError("Inputs should be list, np.ndarray, float or int")
+        else:
+            for i in range(4):
+                if isinstance(input_lim[i],(int,float)):
+                    if input_lim[i] < lim_list[i][1]:
+                        print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                        input_lim[i] = lim_list[i][1]
+                    elif input_lim[i] > lim_list[i][1]:
+                        print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                        input_lim[i] = lim_list[i][0]
+                elif isinstance(input_lim[i],(list,np.ndarray)):
+                    input_lim[i] = np.array(input_lim[i])
+                    if np.all((lim_list[i][1] < input[i]) & (lim_list[i][0] > input[i])) == False:
+                        print('The {} input is outside the range value. The result will be saturated'.format(name[i]))
+                    input_lim[i][input_lim[i] < lim_list[i][1]] = lim_list[i][1]
+                    input_lim[i][input_lim[i] > lim_list[i][0]] = lim_list[i][0]
+                else:
+                    raise TypeError("Inputs should be list, np.ndarray, float or int")
         return input_lim
     
     @staticmethod
