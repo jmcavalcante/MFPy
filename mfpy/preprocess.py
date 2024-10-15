@@ -323,6 +323,12 @@ class PreProcessing:
         return input_lim
     
     @staticmethod
+    def check_speed(input):
+        for i in input[-1]:
+                if i <=0:
+                    raise ValueError("No compability with negative or null speeds.")
+    
+    @staticmethod
     def creating_coefs(headers):
         nominal = {'V0':headers['MODEL']['LONGVL'],'FZ0':headers['VERTICAL']['FNOMIN'],'R0':headers['DIMENSION']['UNLOADED_RADIUS']}
 
