@@ -4,6 +4,8 @@ from collections import namedtuple
 
 def solve(input_values,header,check_limits=False,no_warnings=False):
 
+    PreProcessing.check_speed(input_values) #Check for negative or null speed
+
     header_checked = PreProcessing.check_coeff(header,no_warnings) #Check the necessary parameters in the tir file
 
     PreProcessing.check_input_size(input_values) #Check input len
