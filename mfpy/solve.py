@@ -42,7 +42,7 @@ def solve(input_values,header,check_limits=False,no_warnings=False):
                     muY=Fy_pure_output[1],FY0=Fy_pure_output[0],
                     MZ0=Mz_pure_output[0],MZr0=Mz_pure_output[1],t0=Mz_pure_output[2],
                     FX=Fx_combined_output[0],FY=Fy_combined_output[0],
-                    MZ=Mz_combined_output[0],s=Mz_pure_output[2],t=Mz_pure_output[1],
+                    MZ=Mz_combined_output[0],s=Mz_combined_output[2],t=Mz_combined_output[1],
                     MY=My_output[0],MX=Mx_output[0],
                     alpha=alpha_input,gamma=gamma_input,FZ=Fz_input,
                     kappa=kappa_input,VX=Vx_input,
