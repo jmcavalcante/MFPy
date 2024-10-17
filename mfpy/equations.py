@@ -176,7 +176,7 @@ class Pacejka:
         Et = (qez1 + qez2*dfz + qez3*dfz**2)*(1 + (qez4 + qez5*gamma_star)*(2/3.14)*np.arctan(Bt*Ct*alphat)) #(4.E44)
 
         ##t0
-        t0 = Dt*np.cos(Ct*np.arctan(Bt*alphat - Et*(Bt*alphat - np.arctan(Bt*alphat)))) #(4.E33)
+        t0 = Dt*np.cos(Ct*np.arctan(Bt*alphat - Et*(Bt*alphat - np.arctan(Bt*alphat))))*np.cos(alpha) #(4.E33)
 
 
         ##Dr
@@ -351,7 +351,7 @@ class Pacejka:
         
         ##t
         alpha_teq = (alphat**2 + (Kxkappa/Kyalpha)**2*kappa**2)**0.5*np.sign(alphat) #(4.E77)
-        t = Dt*np.cos(Ct*np.arctan(Bt*alpha_teq - Et*(Bt*alpha_teq - np.arctan(Bt*alpha_teq)))) #(4.E73)
+        t = Dt*np.cos(Ct*np.arctan(Bt*alpha_teq - Et*(Bt*alpha_teq - np.arctan(Bt*alpha_teq))))*np.cos(alpha) #(4.E73)
 
         ##Mzr
         alpha_req = (alphar**2 + (Kxkappa/Kyalpha)**2*kappa**2)**0.5 #(4.E78)
