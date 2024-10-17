@@ -323,10 +323,13 @@ class PreProcessing:
         return input_lim
     
     @staticmethod
-    def check_speed(input):
+    def check_speed_Fz(input):
         for i in input[-1]:
                 if i <=0:
                     raise ValueError("No compability with negative or null speeds.")
+        for i in input[-2]:
+            if i <=0:
+                    raise ValueError("No compability with negative or null vertical loads.")
     
     @staticmethod
     def creating_coefs(headers):
