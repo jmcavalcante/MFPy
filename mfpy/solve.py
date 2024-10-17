@@ -4,7 +4,7 @@ from collections import namedtuple
 
 def solve(input_values,header,check_limits=False,no_warnings=False):
 
-    PreProcessing.check_speed(input_values) #Check for negative or null speed
+    PreProcessing.check_speed_Fz(input_values) #Check for negative or null speed/FZ
 
     header_checked = PreProcessing.check_coeff(header,no_warnings) #Check the necessary parameters in the tir file
 
