@@ -120,7 +120,7 @@ class Pacejka:
         return Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0
     
     @staticmethod
-    def Mz_pure(alpha_gamma_Fz,qbz1,qbz2,qbz3,qbz4,qbz5,qbz9,qbz10,qcz1,qdz1,qdz2,qdz3,qdz4,qdz6,qdz7,qdz8,qdz9,qdz10,qdz11,
+    def Mz_pure(alpha_gamma_Fz_Vx,qbz1,qbz2,qbz3,qbz4,qbz5,qbz9,qbz10,qcz1,qdz1,qdz2,qdz3,qdz4,qdz6,qdz7,qdz8,qdz9,qdz10,qdz11,
                 qez1,qez2,qez3,qez4,qez5,
                 qhz1,qhz2,qhz3,qhz4,
                 Fz0_,R0,Fy0_output):
@@ -131,7 +131,7 @@ class Pacejka:
         This function will calculate the Mz0 for a pure cornering situation:
         """
         Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0 = Fy0_output
-        alpha,gamma,Fz = alpha_gamma_Fz
+        alpha,gamma,Fz,Vx = alpha_gamma_Fz_Vx
         lambda_t=1
         lambda_Fz0=1
         lambda_Ky=1
@@ -176,7 +176,13 @@ class Pacejka:
         Et = (qez1 + qez2*dfz + qez3*dfz**2)*(1 + (qez4 + qez5*gamma_star)*(2/3.14)*np.arctan(Bt*Ct*alphat)) #(4.E44)
 
         ##t0
-        t0 = Dt*np.cos(Ct*np.arctan(Bt*alphat - Et*(Bt*alphat - np.arctan(Bt*alphat))))*np.cos(alpha) #(4.E33)
+        #cos'alpha = Vcx/Vc (Vcx = Vx)
+        Vcx = Vx
+        Vsy = np.tan(alpha)*Vcx
+        Vcy  = Vsy
+        Vc = (Vcy**2 + Vcx**2)**0.5
+
+        t0 = Dt*np.cos(Ct*np.arctan(Bt*alphat - Et*(Bt*alphat - np.arctan(Bt*alphat))))*(Vcx/Vc) #(4.E33)
 
 
         ##Dr
@@ -320,7 +326,7 @@ class Pacejka:
         return Fy,SVykappa
     
     @staticmethod
-    def Mz_combined(alpha_kappa_gamma_Fz,ssz1,ssz2,ssz3,ssz4,Fz0_,R0,Fx_output,Fy_output,Mz0_output,Fx0_output,Fy0_output):
+    def Mz_combined(alpha_kappa_gamma_Fz_Vx,ssz1,ssz2,ssz3,ssz4,Fz0_,R0,Fx_output,Fy_output,Mz0_output,Fx0_output,Fy0_output):
         """
         This function will calculate Mz combined (lat and long) :
         """
@@ -329,7 +335,7 @@ class Pacejka:
         Mz0,Mzr0,t0,alphat,Bt,Ct,Dt,Et,SHt,alphar,Br,Cr,Dr = Mz0_output
         Fx0,mux,kappax,Bx,Cx,Dx,Ex,SVx,SHx,Kxkappa = Fx0_output
         Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0 = Fy0_output
-        alpha,kappa,gamma,Fz = alpha_kappa_gamma_Fz
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         lambda_s = 1
         lambda_Fz0 = 1
 
@@ -350,8 +356,13 @@ class Pacejka:
         Fy_ = Fy - SVykappa #(4.E74)
         
         ##t
+        #cos'alpha = Vcx/Vc (Vcx = Vx)
+        Vcx = Vx
+        Vsy = np.tan(alpha)*Vcx
+        Vcy  = Vsy
+        Vc = (Vcy**2 + Vcx**2)**0.5
         alpha_teq = (alphat**2 + (Kxkappa/Kyalpha)**2*kappa**2)**0.5*np.sign(alphat) #(4.E77)
-        t = Dt*np.cos(Ct*np.arctan(Bt*alpha_teq - Et*(Bt*alpha_teq - np.arctan(Bt*alpha_teq))))*np.cos(alpha) #(4.E73)
+        t = Dt*np.cos(Ct*np.arctan(Bt*alpha_teq - Et*(Bt*alpha_teq - np.arctan(Bt*alpha_teq))))*(Vcx/Vc) #(4.E73)
 
         ##Mzr
         alpha_req = (alphar**2 + (Kxkappa/Kyalpha)**2*kappa**2)**0.5 #(4.E78)
