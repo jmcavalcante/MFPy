@@ -4,7 +4,7 @@ from collections import namedtuple
 
 def solve(input_values,header,check_limits=False,no_warnings=False):
 
-    PreProcessing.check_speed_Fz(input_values) #Check for negative or null speed/FZ
+    PreProcessing.check_speed_Fz(input_values) #Check for negative or null speed and FZ
 
     header_checked = PreProcessing.check_coeff(header,no_warnings) #Check the necessary parameters in the tir file
 
@@ -25,13 +25,13 @@ def solve(input_values,header,check_limits=False,no_warnings=False):
 
     Fy_pure_output = Pacejka.Fy_pure((alpha,gamma,Fz),*Fy_pure_coef,nominal['FZ0']) #Fy0 pure cornering
 
-    Mz_pure_output = Pacejka.Mz_pure(((alpha,gamma,Fz)),*Mz_pure_coef,nominal['FZ0'],nominal['R0'],Fy_pure_output) #Mz0 pure cornering
+    Mz_pure_output = Pacejka.Mz_pure(((alpha,gamma,Fz,Vx)),*Mz_pure_coef,nominal['FZ0'],nominal['R0'],Fy_pure_output) #Mz0 pure cornering
 
     Fx_combined_output = Pacejka.Fx_combined((alpha,kappa,gamma,Fz),*Fx_combined_coef,nominal['FZ0'],Fx_pure_output) #Fx combined
 
     Fy_combined_output = Pacejka.Fy_combined((alpha,kappa,gamma,Fz),*Fy_combined_coef,nominal['FZ0'],Fy_pure_output) #Fy combined
 
-    Mz_combined_output = Pacejka.Mz_combined((alpha,kappa,gamma,Fz),*Mz_combined_coef,nominal['FZ0'],nominal['R0'],Fx_combined_output,Fy_combined_output,Mz_pure_output,
+    Mz_combined_output = Pacejka.Mz_combined((alpha,kappa,gamma,Fz,Vx),*Mz_combined_coef,nominal['FZ0'],nominal['R0'],Fx_combined_output,Fy_combined_output,Mz_pure_output,
                                                 Fx_pure_output,Fy_pure_output,) #Mz combined
 
     My_output = Pacejka.My_RR((Fz,Vx),nominal['FZ0'],nominal['R0'],nominal['V0'],Fx_combined_output,*My_coef) #Rolling resistance torque
