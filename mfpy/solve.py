@@ -21,15 +21,15 @@ def solve(input_values,header,check_limits=False,no_warnings=False):
 
     nominal,Radius_coef,Fx_pure_coef,Fy_pure_coef,Mz_pure_coef,Fx_combined_coef,Fy_combined_coef,Mz_combined_coef,My_coef,Mx_coef = PreProcessing.creating_coefs(header_checked) #The necessary coefs for pacejka function
 
-    Fx_pure_output = Pacejka.Fx_pure((kappa,Fz),*Fx_pure_coef,nominal['FZ0']) #Fx0 pure slip
+    Fx_pure_output = Pacejka.Fx_pure((alpha,kappa,gamma,Fz,Vx),*Fx_pure_coef,nominal['FZ0']) #Fx0 pure slip
 
-    Fy_pure_output = Pacejka.Fy_pure((alpha,gamma,Fz),*Fy_pure_coef,nominal['FZ0']) #Fy0 pure cornering
+    Fy_pure_output = Pacejka.Fy_pure((alpha,kappa,gamma,Fz,Vx),*Fy_pure_coef,nominal['FZ0']) #Fy0 pure cornering
 
-    Mz_pure_output = Pacejka.Mz_pure(((alpha,gamma,Fz,Vx)),*Mz_pure_coef,nominal['FZ0'],nominal['R0'],Fy_pure_output) #Mz0 pure cornering
+    Mz_pure_output = Pacejka.Mz_pure(((alpha,kappa,gamma,Fz,Vx)),*Mz_pure_coef,nominal['FZ0'],nominal['R0'],Fy_pure_output) #Mz0 pure cornering
 
-    Fx_combined_output = Pacejka.Fx_combined((alpha,kappa,gamma,Fz),*Fx_combined_coef,nominal['FZ0'],Fx_pure_output) #Fx combined
+    Fx_combined_output = Pacejka.Fx_combined((alpha,kappa,gamma,Fz,Vx),*Fx_combined_coef,nominal['FZ0'],Fx_pure_output) #Fx combined
 
-    Fy_combined_output = Pacejka.Fy_combined((alpha,kappa,gamma,Fz),*Fy_combined_coef,nominal['FZ0'],Fy_pure_output) #Fy combined
+    Fy_combined_output = Pacejka.Fy_combined((alpha,kappa,gamma,Fz,Vx),*Fy_combined_coef,nominal['FZ0'],Fy_pure_output) #Fy combined
 
     Mz_combined_output = Pacejka.Mz_combined((alpha,kappa,gamma,Fz,Vx),*Mz_combined_coef,nominal['FZ0'],nominal['R0'],Fx_combined_output,Fy_combined_output,Mz_pure_output,
                                                 Fx_pure_output,Fy_pure_output,) #Mz combined

@@ -69,7 +69,7 @@ class PreProcessing:
                         'LCY','LGAY','LKY','LHY','LVY','LEY','LTR',
                         'LRES','LKZC','LXAL','LVYKA','LYKA','LS','LMY','LMX'] 
         
-        longitudinal_keys = ['PCX1','PDX1','PDX2','PEX1','PEX2','PEX3','PEX4',
+        longitudinal_keys = ['PCX1','PDX1','PDX2','PDX3','PEX1','PEX2','PEX3','PEX4',
                              'PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2',
                             'RBX1','RBX2','RBX3','RCX1','REX1','REX2','RHX1']
         
@@ -339,7 +339,7 @@ class PreProcessing:
         Radius_values = [headers['VERTICAL'][key] for key in Radius_keys]
 
 
-        Fx_pure_keys = ['PCX1','PDX1','PDX2','PEX1','PEX2','PEX3','PEX4','PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2']
+        Fx_pure_keys = ['PCX1','PDX1','PDX2','PDX3','PEX1','PEX2','PEX3','PEX4','PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2']
         Fx_pure_values = [headers['LONGITUDINAL_COEFFICIENTS'][key] for key in Fx_pure_keys]
 
 
@@ -372,13 +372,13 @@ class PreProcessing:
         try:
             with open(tir_file, 'w') as file:
                 for header, values in headers.items():
-                    file.write('$---------------------------------------------------------------------'+header+'\n')
+                    file.write('$-----------------------------------------------------'+header.lower()+'\n')
                     file.write(f'[{header}]\n')
                     for key, value in values.items():
                         if isinstance(value, float):
-                            file.write(f'{key} = {value}\n')
+                            file.write(f'{key}                     = {value}\n')
                         else:
-                            file.write(f'{key} = {value}\n')
+                            file.write(f'{key}                     = {value}\n')
         except Exception as e:
             print('Error writing the .tir file')
             raise

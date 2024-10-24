@@ -2,13 +2,13 @@ import numpy as np
 
 class Pacejka:
     @staticmethod
-    def Fx_pure(kappa_Fz,pcx1,pdx1,pdx2,pex1,pex2,pex3,pex4,pkx1,pkx2,pkx3,phx1,phx2,pvx1,pvx2,Fz0_):
+    def Fx_pure(alpha_kappa_gamma_Fz_Vx,pcx1,pdx1,pdx2,pdx3,pex1,pex2,pex3,pex4,pkx1,pkx2,pkx3,phx1,phx2,pvx1,pvx2,Fz0_,star_correction=True):
 
         """
         This function will calculate the Fx0 for a pure longitudinal situation:
         """
 
-        kappa,Fz = kappa_Fz
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         lambda_Cx=1
         lambda_Fz0=1
         lambda_mux=1
@@ -16,6 +16,14 @@ class Pacejka:
         lambda_Hx=1
         lambda_Vx=1
         lambda_Ex=1
+        lambda_gammax = 1
+
+        epsilon = 0.001
+
+        if star_correction == True:
+            gamma = np.sin(gamma)*lambda_gammax #(4.E4)
+        else:
+            gamma = gamma*lambda_gammax
 
         
         ##Vertical load
@@ -31,16 +39,15 @@ class Pacejka:
 
         """
         ##Dx
-        mux = (pdx1 + pdx2*dfz)*lambda_mux #(4.E13)
+        mux = (pdx1 + pdx2*dfz)*(1-pdx3*gamma**2)*lambda_mux #(4.E13)
         Dx = mux*Fz #(4.E12)
 
         ##Cx 
         Cx = pcx1*lambda_Cx #(4.E12)
 
         ##Bx:
-        epsilon_x = 0.0001
         Kxkappa = Fz*(pkx1 + pkx2*dfz)*np.exp(pkx3*dfz)*lambda_Kx #(4.E15)
-        Bx = Kxkappa/(Cx*Dx + epsilon_x*np.where(Cx*Dx==0,1,0)) #(4.E16)
+        Bx = Kxkappa/(Cx*Dx + epsilon*np.where(Cx*Dx==0,1,0)) #(4.E16)
 
         ##kappax
         SHx = (phx1 + phx2*dfz)*lambda_Hx #(4.E17)
@@ -50,7 +57,7 @@ class Pacejka:
         Ex = (pex1 + pex2*dfz + pex3*dfz**2)*(1-pex4*np.sign(kappax))*lambda_Ex #(4.E14)
 
         #SVx
-        SVx = Fz*(pvx1 + pvx2*dfz)*lambda_Vx #(4.E18) obs: the lambda' and (Vcx/(epsilong + Vcx)) will be neglected
+        SVx = Fz*(pvx1 + pvx2*dfz)*lambda_Vx*lambda_mux #(4.E18) obs: the lambda' and (Vcx/(epsilong + Vcx)) will be neglected
 
         #Fx0
         Fx0 = Dx*np.sin(Cx*np.arctan(Bx*kappax - Ex*(Bx*kappax - np.arctan(Bx*kappax)))) + SVx #(4.E9)
@@ -58,14 +65,14 @@ class Pacejka:
         return Fx0,mux,kappax,Bx,Cx,Dx,Ex,SVx,SHx,Kxkappa
     
     @staticmethod
-    def Fy_pure(alpha_gamma_Fz,pcy1,pdy1,pdy2,pdy3,pey1,pey2,pey3,pey4,pey5,pky1,pky2,pky3,pky4,pky5,pky6,pky7,
+    def Fy_pure(alpha_kappa_gamma_Fz_Vx,pcy1,pdy1,pdy2,pdy3,pey1,pey2,pey3,pey4,pey5,pky1,pky2,pky3,pky4,pky5,pky6,pky7,
                           phy1,phy2,pvy1,pvy2,pvy3,pvy4,Fz0_):
 
         """
         This function will calculate the Fy0 for a pure cornering situation:
         """
 
-        alpha,gamma,Fz = alpha_gamma_Fz
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         lambda_Cy=1
         lambda_Fz0=1
         lambda_muy=1
@@ -120,7 +127,7 @@ class Pacejka:
         return Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0
     
     @staticmethod
-    def Mz_pure(alpha_gamma_Fz_Vx,qbz1,qbz2,qbz3,qbz4,qbz5,qbz9,qbz10,qcz1,qdz1,qdz2,qdz3,qdz4,qdz6,qdz7,qdz8,qdz9,qdz10,qdz11,
+    def Mz_pure(alpha_kappa_gamma_Fz_Vx,qbz1,qbz2,qbz3,qbz4,qbz5,qbz9,qbz10,qcz1,qdz1,qdz2,qdz3,qdz4,qdz6,qdz7,qdz8,qdz9,qdz10,qdz11,
                 qez1,qez2,qez3,qez4,qez5,
                 qhz1,qhz2,qhz3,qhz4,
                 Fz0_,R0,Fy0_output):
@@ -131,7 +138,7 @@ class Pacejka:
         This function will calculate the Mz0 for a pure cornering situation:
         """
         Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0 = Fy0_output
-        alpha,gamma,Fz,Vx = alpha_gamma_Fz_Vx
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         lambda_t=1
         lambda_Fz0=1
         lambda_Ky=1
@@ -210,13 +217,13 @@ class Pacejka:
         return Mz0,Mzr0,t0,alphat,Bt,Ct,Dt,Et,SHt,alphar,Br,Cr,Dr
     
     @staticmethod
-    def Fx_combined(alpha_kappa_gamma_Fz,rbx1,rbx2,rbx3,rcx1,rex1,rex2,rhx1,Fz0_,Fx0_output):
+    def Fx_combined(alpha_kappa_gamma_Fz_Vx,rbx1,rbx2,rbx3,rcx1,rex1,rex2,rhx1,Fz0_,Fx0_output):
 
         """
         This function will calculate the Fx for a combined (lat and long) situation:
         """
 
-        alpha,kappa,gamma,Fz = alpha_kappa_gamma_Fz
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         Fx0,mux,kappax,Bx,Cx,Dx,Ex,SVx,SHx,Kxkappa = Fx0_output
         lambda_xalpha = 1
         lambda_Fz0 = 1
@@ -265,13 +272,13 @@ class Pacejka:
         return Fx, Gxalpha
     
     @staticmethod
-    def Fy_combined(alpha_kappa_gamma_Fz,rby1,rby2,rby3,rby4,rcy1,rey1,rey2,rhy1,rhy2,
+    def Fy_combined(alpha_kappa_gamma_Fz_Vx,rby1,rby2,rby3,rby4,rcy1,rey1,rey2,rhy1,rhy2,
                     rvy1,rvy2,rvy3,rvy4,rvy5,rvy6,Fz0_,Fy0_output):
         """
         This function will calculate the Fy for a combined (lat and long) situation:
         """
         Fy0,mu_y,alphay,By,Cy,Dy,Ey,SVy,SHy,SVygamma,Kyalpha,Kygamma_0 = Fy0_output
-        alpha,kappa,gamma,Fz = alpha_kappa_gamma_Fz
+        alpha,kappa,gamma,Fz,Vx = alpha_kappa_gamma_Fz_Vx
         lambda_vykappa = 1
         lambda_ykappa = 1
         lambda_Fz0 = 1

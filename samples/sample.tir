@@ -15,7 +15,7 @@ $----------------------------------------------------------------units
  TIME                = 'second'
 $-----------------------------------------------------------------model
 [MODEL]
-FITTYP                   = 52
+FITTYP                   = 6
 USE_MODE                 = 14                       $Tyre use switch (IUSED)
 VXLOW                    = 1
 LONGVL                   = 16.7                     $Measurement speed
@@ -60,11 +60,11 @@ ALPMIN                   = -0.5                     $Minimum valid slip angle
 ALPMAX                   =  0.5                     $Maximum valid slip angle
 $-----------------------------------------------inclination_slip_range
 [INCLINATION_ANGLE_RANGE]
-CAMMIN                   = -0.2                     $Minimum valid camber angle
-CAMMAX                   =  0.2                     $Maximum valid camber angle
+CAMMIN                   = -0.1                     $Minimum valid camber angle
+CAMMAX                   =  0.1                     $Maximum valid camber angle
 $-------------------------------------------------vertical_force_range
 [VERTICAL_FORCE_RANGE]
-FZMIN                    = 1000                      $Minimum allowed wheel load
+FZMIN                    = 3000                      $Minimum allowed wheel load
 FZMAX                    = 10000.0                  $Maximum allowed wheel load
 $--------------------------------------------------------------scaling
 [SCALING_COEFFICIENTS]
@@ -104,6 +104,7 @@ $--------------------------------------------------------LONGITUDINAL_FORCE
 PCX1                     =  1.5                 $Shape factor Cfx for longitudinal force
 PDX1                     =  1.0                $Longitudinal friction Mux at Fznom
 PDX2                     = -0.08               $Variation of friction Mux with load
+PDX3                     = -1.00
 PEX1                     =  0.1                $Longitudinal curvature Efx at Fznom
 PEX2                     =  0.3                 $Variation of curvature Efx with load
 PEX3                     =  0                    $Variation of curvature Efx with load squared
