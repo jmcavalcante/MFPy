@@ -65,26 +65,24 @@ class PreProcessing:
 
         vertical_keys = ['FNOMIN','VERTICAL_STIFFNESS','VERTICAL_DAMPING','BREFF','DREFF','FREFF']
 
-        scaling_keys = ['LCX','LFZO','LGAX','LKX','LHX','LVX','LEX',
-                        'LCY','LGAY','LKY','LHY','LVY','LEY','LTR',
-                        'LRES','LKZC','LXAL','LVYKA','LYKA','LS','LMY','LMX'] 
+        scaling_keys = ['LFZO','LCX','LMUX','LEX','LKX','LHX','LVX','LGAX','LCY','LMUY','LEY','LKY','LHY'
+                        ,'LHY','LVY','LGAY','LTR','LRES','LGAZ','LMX','LVMX','LMY','LXAL','LYKA','LVYKA','LS'] 
         
         longitudinal_keys = ['PCX1','PDX1','PDX2','PDX3','PEX1','PEX2','PEX3','PEX4',
                              'PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2',
-                            'RBX1','RBX2','RBX3','RCX1','REX1','REX2','RHX1']
+                            'RBX1','RBX2','RCX1','REX1','REX2','RHX1']
         
-        lateral_keys = ['PCY1','PDY1','PDY2','PDY3','PEY1','PEY2','PEY3','PEY4','PEY5','PKY1','PKY2','PKY3','PKY4','PKY5','PKY6','PKY7',
-                        'PHY1','PHY2','PVY1','PVY2','PVY3','PVY4',
-                        'RBY1','RBY2','RBY3','RBY4','RCY1','REY1','REY2','RHY1','RHY2','RVY1','RVY2','RVY3','RVY4','RVY5','RVY6']
+        lateral_keys = ['PCY1','PDY1','PDY2','PDY3','PEY1','PEY2','PEY3','PEY4','PKY1','PKY2','PKY3',
+                        'PHY1','PHY2','PHY3','PVY1','PVY2','PVY3','PVY4',
+                        'RBY1','RBY2','RBY3','RCY1','REY1','REY2','RHY1','RHY2','RVY1','RVY2','RVY3','RVY4','RVY5','RVY6']
         
-        aligning_keys = ['QDZ1','QDZ2','QDZ3','QDZ4','QDZ6','QDZ7',
-                        'QDZ8','QDZ9','QDZ10','QDZ11','QCZ1','QBZ1','QBZ2',
-                        'QBZ3','QBZ5','QBZ9','QBZ10','QHZ1','QHZ2','QHZ3',
-                        'QHZ4','QEZ1','QEZ2','QEZ3','QEZ4','QEZ5','SSZ1','SSZ2','SSZ3','SSZ4']
+        aligning_keys = ['QBZ1','QBZ2','QBZ3','QBZ4','QBZ5','QBZ9','QBZ10','QCZ1','QDZ1','QDZ2','QDZ3','QDZ4','QDZ6','QDZ7',
+                        'QDZ8','QDZ9','QEZ1','QEZ2','QEZ3','QEZ4','QEZ5','QHZ1','QHZ2','QHZ3','QHZ4',
+                        'SSZ1','SSZ2','SSZ3','SSZ4']
         
         overturning_keys = ['QSX1','QSX2','QSX3']
         
-        rolling_keys = ['QSY1','QSY2','QSY3']
+        rolling_keys = ['QSY1','QSY2','QSY3','QSY4']
         if no_warnings:
             with NoWarnings():
                 if model_keys[0] not in headers['MODEL']:
@@ -339,22 +337,23 @@ class PreProcessing:
         Radius_values = [headers['VERTICAL'][key] for key in Radius_keys]
 
 
-        Fx_pure_keys = ['PCX1','PDX1','PDX2','PDX3','PEX1','PEX2','PEX3','PEX4','PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2']
+        Fx_pure_keys = ['PCX1','PDX1','PDX2','PDX3','PEX1','PEX2','PEX3','PEX4',
+                             'PKX1','PKX2','PKX3','PHX1','PHX2','PVX1','PVX2']
         Fx_pure_values = [headers['LONGITUDINAL_COEFFICIENTS'][key] for key in Fx_pure_keys]
 
 
-        Fy_pure_keys = ['PCY1','PDY1','PDY2','PDY3','PEY1','PEY2','PEY3','PEY4','PEY5','PKY1','PKY2','PKY3','PKY4','PKY5','PKY6','PKY7',
-                        'PHY1','PHY2','PVY1','PVY2','PVY3','PVY4']
+        Fy_pure_keys = ['PCY1','PDY1','PDY2','PDY3','PEY1','PEY2','PEY3','PEY4','PKY1','PKY2','PKY3',
+                        'PHY1','PHY2','PHY3','PVY1','PVY2','PVY3','PVY4']
         Fy_pure_values = [headers['LATERAL_COEFFICIENTS'][key] for key in Fy_pure_keys]
 
-        Mz_pure_keys = ['QBZ1','QBZ2','QBZ3','QBZ4','QBZ5','QBZ9','QBZ10','QCZ1','QDZ1','QDZ2','QDZ3','QDZ4','QDZ6','QDZ7','QDZ8','QDZ9','QDZ10','QDZ11',
-                        'QEZ1','QEZ2','QEZ3','QEZ4','QEZ5','QHZ1','QHZ2','QHZ3','QHZ4']
+        Mz_pure_keys = ['QBZ1','QBZ2','QBZ3','QBZ4','QBZ5','QBZ9','QBZ10','QCZ1','QDZ1','QDZ2','QDZ3','QDZ4','QDZ6','QDZ7',
+                        'QDZ8','QDZ9','QEZ1','QEZ2','QEZ3','QEZ4','QEZ5','QHZ1','QHZ2','QHZ3','QHZ4']
         Mz_pure_values = [headers['ALIGNING_COEFFICIENTS'][key] for key in Mz_pure_keys]
 
-        Fx_combined_keys = ['RBX1','RBX2','RBX3','RCX1','REX1','REX2','RHX1']
+        Fx_combined_keys = ['RBX1','RBX2','RCX1','REX1','REX2','RHX1']
         Fx_combined_values = [headers['LONGITUDINAL_COEFFICIENTS'][key] for key in Fx_combined_keys]
 
-        Fy_combined_keys = ['RBY1','RBY2','RBY3','RBY4','RCY1','REY1','REY2','RHY1','RHY2','RVY1','RVY2','RVY3','RVY4','RVY5','RVY6']
+        Fy_combined_keys = ['RBY1','RBY2','RBY3','RCY1','REY1','REY2','RHY1','RHY2','RVY1','RVY2','RVY3','RVY4','RVY5','RVY6']
         Fy_combined_values = [headers['LATERAL_COEFFICIENTS'][key] for key in Fy_combined_keys]
 
         Mz_combined_keys = ['SSZ1','SSZ2','SSZ3','SSZ4']
