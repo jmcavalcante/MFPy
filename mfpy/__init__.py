@@ -1,4 +1,4 @@
 from .solve import solve
-from .equations import Pacejka
-from .preprocess import PreProcessing
-from .fit import Fit
+from .equations import pacejka
+from .preprocess import preprocessing
+from .fit import fit
