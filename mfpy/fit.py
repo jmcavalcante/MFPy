@@ -186,7 +186,7 @@ class fit:
             FZ_nom = statistics.median(FZ_list)
 
         def residuals_MZ(params,x,y):
-            alpha_data,kappa_data,gamma_data,FZ_data,VX_data = x
+            alpha_data,kappa_data,_,FZ_data,VX_data = x
             FY0_output = pacejka.FY_pure((alpha_data,kappa_data,np.zeros(FZ_data.shape),FZ_data,VX_data),*p_FY_pure,FZ_nom)
             return y - pacejka.MZ_pure(x,*params,FZ_nom,R0,FY0_output)[0].ravel()
 
@@ -368,7 +368,7 @@ class fit:
     #For the interface (app)
         if full_output=='data_only':       
             FY0_output = pacejka.FY_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*p_FY_pure,FZ_nom)
-            FY_initial = pacejka.FY_combined((alpha_data,kappa_data,gamma_data,FZ_data),*initial_guess,FZ_nom,FY0_output)[0].ravel()
+            FY_initial = pacejka.FY_combined((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*initial_guess,FZ_nom,FY0_output)[0].ravel()
             FZ_data_output = [i[0] for i in FZ_data]
             FY_data_output = [FY_data[i:i+size] for i in range(0,len(FY_data),size)]
             FY_initial_output = [FY_initial[i:i+size] for i in range(0,len(FY_initial),size)]

@@ -87,7 +87,7 @@ def solve(alpha_kappa_gamma_FZ_VX,tir_data,check_limits=False,star_correction=Fa
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY1,
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY2,
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY3,
-                                                                 tir_data.LATERAL_COEFFICIENTS.PVY4,],tir_data.VERTICAL.FNOMIN,scaling_coefficients=tir_data.SCALING_COEFFICIENTS,star_correction=star_correction)
+                                                                 tir_data.LATERAL_COEFFICIENTS.PVY4],tir_data.VERTICAL.FNOMIN,scaling_coefficients=tir_data.SCALING_COEFFICIENTS,star_correction=star_correction)
 
     #FX pure cornering calculation with zero camber
     FY_pure_gamma0_output = pacejka.FY_pure((alpha,kappa,np.zeros(len(alpha)),FZ,VX),*[tir_data.LATERAL_COEFFICIENTS.PCY1,
