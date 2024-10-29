@@ -47,7 +47,7 @@ def solve(alpha_kappa_gamma_FZ_VX,tir_data,check_limits=False,star_correction=Fa
 
     
     #Output namedTuple
-    output = namedtuple('MFOutput',["alpha","kappa",'gamma','VX',"FX","FY",'muX','muY','FZ','MX','MY','MZ','t','s','FX0','FY0','MZ0','MZr0','t0','Re','rho','omega'])
+    output = namedtuple('MFOutput',["alpha","kappa",'gamma','VX',"FX","FY",'muX','muY','FZ','MX','MY','MZ','MZr','t','s','FX0','FY0','MZ0','MZr0','t0','Re','rho','omega'])
     
     #nominal,Radius_coef,FX_pure_coef,FY_pure_coef,MZ_pure_coef,FX_combined_coef,FY_combined_coef,MZ_combined_coef,My_coef,Mx_coef = preprocessing.creating_coefs(tir_data_checked) #The necessary coefs for pacejka function
     
@@ -205,7 +205,7 @@ def solve(alpha_kappa_gamma_FZ_VX,tir_data,check_limits=False,star_correction=Fa
                     muY=FY_pure_output[1],FY0=FY_pure_output[0],
                     MZ0=MZ_pure_output[0],MZr0=MZ_pure_output[1],t0=MZ_pure_output[2],
                     FX=FX_combined_output[0],FY=FY_combined_output[0],
-                    MZ=MZ_combined_output[0],s=MZ_combined_output[2],t=MZ_combined_output[1],
+                    MZ=MZ_combined_output[0],s=MZ_combined_output[2],t=MZ_combined_output[1],MZr=MZ_combined_output[3],
                     MY=MY_output[0],MX=MX_output[0],
                     alpha=alpha_input,gamma=gamma_input,FZ=FZ_input,
                     kappa=kappa_input,VX=VX,
