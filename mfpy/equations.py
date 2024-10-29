@@ -133,7 +133,7 @@ class pacejka:
 
         """
         ##Dy
-        mu_y    =   lambda_muy*(pdy1 + pdy2*dfz)/(1-pdy3*gamma**2) #(4.E23)
+        mu_y    =   lambda_muy*(pdy1 + pdy2*dfz)*(1-pdy3*gamma**2) #(4.E23)
         Dy      =   mu_y*FZ #(4.E22)
 
         ##Cy
@@ -141,7 +141,7 @@ class pacejka:
     
         ##By
         pky4    =   2
-        Ky      =   lambda_Ky*pky1*FZ0_*np.sin(pky4*np.arctan(FZ/(pky2*FZ0_)))/(1 - pky3*np.abs(gamma)) #(4.E25)
+        Ky      =   lambda_Ky*pky1*FZ0_*np.sin(pky4*np.arctan(FZ/(pky2*FZ0_)))*(1 - pky3*np.abs(gamma)) #(4.E25)
         #Kyalpha = Kyalpha + epsilon*np.where(Kyalpha==0,1,0)
         By      =   Ky/(Cy*Dy + epsilon*np.where(Cy*Dy==0,1,0))  #(4.E26)
 
@@ -153,7 +153,7 @@ class pacejka:
         Ey      =   (pey1 + pey2*dfz)*(1 -(pey3+pey4*gamma)*np.sign(alphay))*lambda_Ey #(4.E24)
 
         ##SVy
-        SVy     =   (FZ*(pvy1 + pvy2*dfz)*lambda_Vy + (pvy3 + pvy4*dfz))*lambda_muy #(4.E29)
+        SVy     =   FZ*((pvy1 + pvy2*dfz)*lambda_Vy + (pvy3 + pvy4*dfz)*gamma)*lambda_muy #(4.E29)
 
         ##FY0
         FY0     =   Dy*np.sin(Cy*np.arctan(By*alphay - Ey*(By*alphay - np.arctan(By*alphay)))) + SVy #(4.E19)
@@ -225,7 +225,7 @@ class pacejka:
         """
 
         ##Dt
-        Dt0         =    FZ*(R0/FZ0)*(qdz1 + qdz2*dfz)*lambda_t #(4.E42)
+        Dt0         =    FZ*(R0/FZ0_)*(qdz1 + qdz2*dfz)*lambda_t #(4.E42)
         Dt          =    Dt0*(1+qdz3*gamma + qdz4*gamma**2) #(4.E43)
 
         ##Ct
@@ -253,7 +253,7 @@ class pacejka:
         #t0 =  Dt*np.cos(Ct*np.arctan(Bt*alphat - Et*(Bt*alphat - np.arctan(Bt*alphat))))*(1-(alpha**2)/2) #(4.E33) aproximmation to improve fit performance
 
         ##Dr
-        Dr          =    FZ*R0*((qdz6 + qdz7*dfz)*lambda_Mr + (qdz8 + qdz9*dfz)*gamma)#(4.E47)
+        Dr          =    FZ*R0*((qdz6 + qdz7*dfz)*lambda_Mr + (qdz8 + qdz9*dfz)*gamma)*(Vcx/Vc)#(4.E47)
 
         ##Cr
         Cr          =    1 #(4.E46)
@@ -266,7 +266,7 @@ class pacejka:
         alphar      =    alpha + SHr #(4.E37)
 
         ##MZr
-        MZr0        =    Dr*np.cos(Cr*np.arctan(Br*alphar))*np.cos(alpha) #(4.E36)
+        MZr0        =    Dr*np.cos(Cr*np.arctan(Br*alphar))*(Vcx/Vc) #(4.E36)
 
         ##MZ0
 
@@ -405,7 +405,7 @@ class pacejka:
         SHykappa    =    rhy1 + rhy2*dfz #(4.E65)
 
         ##Dvykappa
-        Dvykappa    =    mu_y*FZ*(rvy1 + rvy2*dfz + rvy3*gamma)*np.arctan(rvy4*alpha) #(4.E67)
+        Dvykappa    =    mu_y*FZ*(rvy1 + rvy2*dfz + rvy3*gamma)*np.cos(np.arctan(rvy4*alpha)) #(4.E67)
 
         ##SVykappa
         SVykappa    =    Dvykappa*np.sin(rvy5*np.arctan(rvy6*kappa))*lambda_vykappa #(4.E66)
@@ -431,7 +431,7 @@ class pacejka:
         """
         FX, _           =    FX_output
         FY,_,SVykappa   =    FY_output
-        _,_,_,alphat,Bt,Ct,Dt,Et,_,alphar,Br,Cr,Dr  =    MZ0_output
+        _,_,_,alphat,Bt,Ct,Dt,Et,_,alphar,Br,Cr,Dr =    MZ0_output
         _,_,_,_,_,_,_,_,_,Kx    =    FX0_output
         _,_,_,_,_,_,_,_,_,Ky    =    FY0_output
         alpha_input,kappa_input,gamma_input,FZ_input,VX_input   =    alpha_kappa_gamma_FZ_VX
@@ -495,7 +495,7 @@ class pacejka:
         ##MZ
         MZ  =    -t*FY_ + MZr + s*FX #(4.E71)
 
-        return MZ,t,s
+        return MZ,t,s,MZr
     
     @staticmethod
     def MX_overturning(gamma_FZ_VX,qsx1,qsx2,qsx3,FZ0,R0,FY_output,scaling_coefficients=None):
