@@ -9,7 +9,7 @@ import scipy
 class fit:
 
     @staticmethod
-    def FX_pure(folder,initial_guess=None,FZ_nom = None,full_output = 0):
+    def FX_pure(folder,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FX
         """
         The folder must contains .csv files with columns LSR and FX. Each file shoud have the follow name structure:
@@ -50,9 +50,6 @@ class fit:
         gamma_data = np.array([np.ones(size)*i for i in gamma_list])
         VX_data = np.ones(FZ_data.shape)*10
 
-        if initial_guess==None:
-            initial_guess = [1,1,-0.1,1,0,0,0,0,10,10,0,0,0,0,0] #Default initial guess
-
         lower_bounds = [0, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf]
         upper_bounds = [ np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf]
 
@@ -64,7 +61,7 @@ class fit:
             FX_initial_output = [FX_initial[i:i+size] for i in range(0,len(FX_initial),size)]
             return FZ_data_output,FX_data_output,kappa_data,gamma_data,FX_initial_output
         
-        result= scipy.optimize.least_squares(residuals_FX, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FX_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_FX, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FX_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
 
         p_fit = result.x
 
@@ -82,7 +79,7 @@ class fit:
         else:
             return p_fit,FZ_nom
     @staticmethod    
-    def FY_pure(folder,initial_guess=None,FZ_nom = None,full_output = 0):
+    def FY_pure(folder,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FY
         """
         The folder must contains .csv files with columns SA and FY. Each file shoud have the follow name structure:
@@ -124,9 +121,6 @@ class fit:
         VX_data = np.ones(FZ_data.shape)*10
         kappa_data = np.zeros(FZ_data.shape)
 
-        if initial_guess==None:
-            initial_guess =  [1,1,0,0,-1,0,0,-10,-10,1,0,0,0,0,0,0,0,0] #Default initial guess
-
         lower_bounds = [0, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf,
                  -np.inf, -np.inf, -np.inf, -np.inf, -np.inf]
         upper_bounds = [ np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf,
@@ -140,7 +134,7 @@ class fit:
             FY_initial_output = [FY_initial[i:i+size] for i in range(0,len(FY_initial),size)]
             return FZ_data_output,FY_data_output,alpha_data,gamma_data,FY_initial_output
         
-        result= scipy.optimize.least_squares(residuals_FY, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FY_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_FY, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FY_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
         p_fit = result.x
 
         if full_output == 2:
@@ -157,7 +151,7 @@ class fit:
         else:
             return p_fit,FZ_nom
     @staticmethod    
-    def MZ_pure(folder,R0,VX,p_FY_pure,initial_guess=None,FZ_nom = None,full_output = 0):
+    def MZ_pure(folder,R0,VX,p_FY_pure,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FY
         """
         The folder must contains .csv files with columns SA and MZ. Each file shoud have the follow name structure:
@@ -186,9 +180,9 @@ class fit:
             FZ_nom = statistics.median(FZ_list)
 
         def residuals_MZ(params,x,y):
-            alpha_data,kappa_data,_,FZ_data,VX_data = x
-            FY0_output = pacejka.FY_pure((alpha_data,kappa_data,np.zeros(FZ_data.shape),FZ_data,VX_data),*p_FY_pure,FZ_nom)
-            return y - pacejka.MZ_pure(x,*params,FZ_nom,R0,FY0_output)[0].ravel()
+            alpha_data,kappa_data,gamma_data,FZ_data,VX_data = x
+            FY0 = pacejka.FY_pure((alpha_data,kappa_data,np.zeros(FZ_data.shape),FZ_data,VX_data),*p_FY_pure,FZ_nom)
+            return y - pacejka.MZ_pure(x,*params,FZ_nom,R0,FY0)[0].ravel()
 
         
         #Checking sizes for all csv (they should have the same lenght)
@@ -202,8 +196,6 @@ class fit:
         VX_data = np.ones(FZ_data.shape)*VX
         kappa_data = np.zeros(FZ_data.shape)
 
-        if initial_guess == None:
-            initial_guess = [20,-1,0,0,-0.1,50,0,1,0.1,0,1,0,0,0,-0.1,0,-1,1,0,0.1,-1,0,0,0.1,0] #default
 
         lower_bounds = [0, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf,
                  -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf]
@@ -212,24 +204,26 @@ class fit:
         
         #For the interface (app)
         if full_output=='data_only':
-            FY0_output = pacejka.FY_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*p_FY_pure,FZ_nom)
-            MZ_initial = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*initial_guess,FZ_nom,R0,FY0_output)[0].ravel()
+            FY0 = pacejka.FY_pure((alpha_data,kappa_data,np.zeros(FZ_data.shape),FZ_data,VX_data),*p_FY_pure,FZ_nom)
+            MZ_initial = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*initial_guess,FZ_nom,R0,FY0)[0].ravel()
             FZ_data_output = [i[0] for i in FZ_data]
             MZ_data_output = [MZ_data[i:i+size] for i in range(0,len(MZ_data),size)]
             MZ_initial_output = [MZ_initial[i:i+size] for i in range(0,len(MZ_initial),size)]
             return FZ_data_output,MZ_data_output,alpha_data,gamma_data,MZ_initial_output
 
-        result= scipy.optimize.least_squares(residuals_MZ, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),MZ_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_MZ, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),MZ_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
         p_fit = result.x
 
         if full_output == 2:
-            FY0_output = pacejka.FY_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*p_FY_pure,FZ_nom)
-            MZ_initial = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*initial_guess,FZ_nom,R0,FY0_output)[0].ravel()
+            FY0 = pacejka.FY_pure((alpha_data,kappa_data,np.zeros(FZ_data.shape),FZ_data,VX_data),*p_FY_pure,FZ_nom)
+            MZ_initial = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*initial_guess,FZ_nom,R0,FY0)[0].ravel()
             FZ_data_output = [i[0] for i in FZ_data]
+            MZ_initial_output = [MZ_initial[i:i+size] for i in range(0,len(MZ_initial),size)]
             MZ_data_output = [MZ_data[i:i+size] for i in range(0,len(MZ_data),size)]
             MZ_initial_output = [MZ_initial[i:i+size] for i in range(0,len(MZ_initial),size)]
-            MZ_fit = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*p_fit,FZ_nom,R0,FY0_output)[0].ravel()
+            MZ_fit = pacejka.MZ_pure((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),*p_fit,FZ_nom,R0,FY0)[0].ravel()
             MZ_fit_output = [MZ_fit[i:i+size] for i in range(0,len(MZ_fit),size)]
+            
 
             return p_fit,initial_guess,FZ_nom,FZ_data_output,MZ_data_output,alpha_data,gamma_data,MZ_initial_output,MZ_fit_output
         
@@ -238,7 +232,7 @@ class fit:
         else:
             return p_fit,FZ_nom
     @staticmethod 
-    def FX_combined(folder,p_FX_pure,initial_guess=None,FZ_nom = None,full_output = 0):
+    def FX_combined(folder,p_FX_pure,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FX
         """
         The folder must contains .csv files with columns LSR and FX. Each file shoud have the follow name structure:
@@ -279,8 +273,6 @@ class fit:
         kappa_data = np.array(kappa_list)
         VX_data = np.ones(FZ_data.shape)*10
 
-        if initial_guess==None:
-            initial_guess = [5,5,1,-1,-1,0] #Default initial guess
 
         lower_bounds = [0, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf]
         upper_bounds = [ np.inf, np.inf, np.inf, np.inf, np.inf, np.inf]
@@ -294,7 +286,7 @@ class fit:
             FX_initial_output = [FX_initial[i:i+size] for i in range(0,len(FX_initial),size)]
             return FZ_data_output,FX_data_output,kappa_data,alpha_data,FX_initial_output
         
-        result= scipy.optimize.least_squares(residuals_FX, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FX_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_FX, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FX_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
 
         p_fit = result.x
 
@@ -314,7 +306,7 @@ class fit:
         else:
             return p_fit,FZ_nom
     @staticmethod 
-    def FY_combined(folder,p_FY_pure,initial_guess=None,FZ_nom = None,full_output = 0):
+    def FY_combined(folder,p_FY_pure,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FX
         """
         The folder must contains .csv files with columns SA and FY. Each file shoud have the follow name structure:
@@ -359,8 +351,6 @@ class fit:
         alpha_data = np.array(alpha_list)
         VX_data = np.ones(FZ_data.shape)
 
-        if initial_guess==None:
-            initial_guess = [10,10,0,1,0,0,0,0,0,0,0,50,1,10] #Default initial guess
 
         lower_bounds = [-np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf, -np.inf,-np.inf,-np.inf,-np.inf,-np.inf,-np.inf,-np.inf,-np.inf]
         upper_bounds = [ np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf,np.inf,np.inf,np.inf,np.inf,np.inf,np.inf,np.inf]
@@ -374,7 +364,7 @@ class fit:
             FY_initial_output = [FY_initial[i:i+size] for i in range(0,len(FY_initial),size)]
             return FZ_data_output,FY_data_output,kappa_data,alpha_data,gamma_data,FY_initial_output
         
-        result= scipy.optimize.least_squares(residuals_FY, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FY_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_FY, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),FY_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
 
         p_fit = result.x
 
@@ -394,7 +384,7 @@ class fit:
         else:
             return p_fit,FZ_nom
     @staticmethod    
-    def MZ_combined(folder,R0,VX,p_FY_pure,p_FX_pure,p_MZ_pure,p_FY_combined,p_FX_combined,initial_guess=None,FZ_nom = None,full_output = 0):
+    def MZ_combined(folder,R0,VX,p_FY_pure,p_FX_pure,p_MZ_pure,p_FY_combined,p_FX_combined,initial_guess,FZ_nom = None,full_output = 0):
         #Reading folder with .csv for FY
         """
         The folder must contains .csv files with columns SA and MZ. Each file shoud have the follow name structure:
@@ -445,8 +435,6 @@ class fit:
         alpha_data = np.array(alpha_list)
         VX_data = np.ones(FZ_data.shape)*VX
 
-        if initial_guess == None:
-            initial_guess = [0.01,0.01,0.01,0.01] #default
         lower_bounds = [-np.inf, -np.inf, -np.inf, -np.inf]
         upper_bounds = [ np.inf, np.inf, np.inf, np.inf]
         
@@ -463,7 +451,7 @@ class fit:
             MZ_initial_output = [MZ_initial[i:i+size] for i in range(0,len(MZ_initial),size)]
             return FZ_data_output,MZ_data_output,alpha_data,gamma_data,MZ_initial_output
 
-        result= scipy.optimize.least_squares(residuals_MZ, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),MZ_data), max_nfev=100000,bounds=(lower_bounds,upper_bounds))
+        result= scipy.optimize.least_squares(residuals_MZ, initial_guess, args=((alpha_data,kappa_data,gamma_data,FZ_data,VX_data),MZ_data), max_nfev=10000,bounds=(lower_bounds,upper_bounds))
         p_fit = result.x
 
         if full_output == 2:

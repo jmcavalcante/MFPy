@@ -107,7 +107,7 @@ def solve(alpha_kappa_gamma_FZ_VX,tir_data,check_limits=False,star_correction=Fa
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY1,
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY2,
                                                                  tir_data.LATERAL_COEFFICIENTS.PVY3,
-                                                                 tir_data.LATERAL_COEFFICIENTS.PVY4,],tir_data.VERTICAL.FNOMIN,scaling_coefficients=tir_data.SCALING_COEFFICIENTS,star_correction=star_correction)
+                                                                 tir_data.LATERAL_COEFFICIENTS.PVY4],tir_data.VERTICAL.FNOMIN,scaling_coefficients=tir_data.SCALING_COEFFICIENTS,star_correction=star_correction)
     #MZ0 pure cornering
     MZ_pure_output = pacejka.MZ_pure(((alpha,kappa,gamma,FZ,VX)),*[tir_data.ALIGNING_COEFFICIENTS.QBZ1,
                                                                  tir_data.ALIGNING_COEFFICIENTS.QBZ2,

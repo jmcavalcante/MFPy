@@ -1,4 +1,3 @@
-#from collections import namedtuple
 from dataclasses import fields, is_dataclass
 from .mf52_structure import mf_52
 
