@@ -25,7 +25,9 @@ pip install -r requirements.txt
 ### Read tir notebook (read_tir.ipynb)
 This notebook teaches you how to read a .tir file that follows the 5.2 protocol. By default, it will read a sample file, but it can be changed to read another file. You can also see some interesting graphs that can be generated from the .tir file, such as the traction circle.
 
-![image](https://github.com/user-attachments/assets/a98af033-2850-41e3-a2e1-b04d16fc1d76)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a98af033-2850-41e3-a2e1-b04d16fc1d76" alt="image">
+</p>
 
 
 ### Fit tir notebook (read_tir.ipynb)
