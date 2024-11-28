@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 # Definindo todas as dataclasses
@@ -195,20 +195,20 @@ class OverturningCoefficients:
 
 @dataclass
 class MF52:
-    MDI_HEADER: MDIHeader = MDIHeader()
-    UNITS: Units = Units()
-    MODEL: Model = Model()
-    DIMENSION: Dimension = Dimension()
-    VERTICAL: Vertical = Vertical()
-    LONG_SLIP_RANGE: LongSlipRange = LongSlipRange()
-    SLIP_ANGLE_RANGE: SlipAngleRange = SlipAngleRange()
-    INCLINATION_ANGLE_RANGE: InclinationAngleRange = InclinationAngleRange()
-    VERTICAL_FORCE_RANGE: VerticalForceRange = VerticalForceRange()
-    SCALING_COEFFICIENTS: ScalingCoefficients = ScalingCoefficients()
-    LONGITUDINAL_COEFFICIENTS: LongitudinalCoefficients = LongitudinalCoefficients()
-    LATERAL_COEFFICIENTS: LateralCoefficients = LateralCoefficients()
-    OVERTURNING_COEFFICIENTS: OverturningCoefficients = OverturningCoefficients()
-    ROLLING_COEFFICIENTS: RollingCoefficients = RollingCoefficients()
-    ALIGNING_COEFFICIENTS: AligningCoefficients = AligningCoefficients()
+    MDI_HEADER: MDIHeader = field(default_factory=MDIHeader)
+    UNITS: Units = field(default_factory=Units)
+    MODEL: Model = field(default_factory=Model)
+    DIMENSION: Dimension = field(default_factory=Dimension)
+    VERTICAL: Vertical = field(default_factory=Vertical)
+    LONG_SLIP_RANGE: LongSlipRange = field(default_factory=LongSlipRange)
+    SLIP_ANGLE_RANGE: SlipAngleRange = field(default_factory=SlipAngleRange)
+    INCLINATION_ANGLE_RANGE: InclinationAngleRange = field(default_factory=InclinationAngleRange)
+    VERTICAL_FORCE_RANGE: VerticalForceRange = field(default_factory=VerticalForceRange)
+    SCALING_COEFFICIENTS: ScalingCoefficients = field(default_factory=ScalingCoefficients)
+    LONGITUDINAL_COEFFICIENTS: LongitudinalCoefficients = field(default_factory=LongitudinalCoefficients)
+    LATERAL_COEFFICIENTS: LateralCoefficients = field(default_factory=LateralCoefficients)
+    OVERTURNING_COEFFICIENTS: OverturningCoefficients = field(default_factory=OverturningCoefficients)
+    ROLLING_COEFFICIENTS: RollingCoefficients = field(default_factory=RollingCoefficients)
+    ALIGNING_COEFFICIENTS: AligningCoefficients = field(default_factory=AligningCoefficients)
 
 mf_52 = MF52()

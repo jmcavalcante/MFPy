@@ -79,7 +79,7 @@ class preprocessing:
             raise
     
     @staticmethod
-    def __write_tir(tir_file, headers):
+    def write_tir(tir_file, headers):
         try:
             with open(tir_file, 'w') as file:
                 for header, values in headers.items():
