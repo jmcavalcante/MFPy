@@ -51,14 +51,14 @@ You can always use the files available in the sample folder as an example!
 
 ### Fit interface (fit_app.py or MFPy fit.exe)
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a98af033-2850-41e3-a2e1-b04d16fc1d76](https://github.com/user-attachments/assets/5307d55d-88af-4744-ad8c-11ac1321b245" alt="image">
+  <img src="https://github.com/user-attachments/assets/6bc0d6e4-b3bd-4891-bc99-bb29c1485d64" alt="image">
 </p>
+
 
 The interface follows the same logic as the notebook, for each test you need to indicate the folder containing the .csv files. However, with an interface, you can better control each parameter of the fit, such as the initial kick, the boundary values and make any corrections before writing the .tir file.
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a98af033-2850-41e3-a2e1-b04d16fc1d76](https://github.com/user-attachments/assets/eaeb0b2c-1522-4bad-a7fa-771994408bee" alt="image">
+  <img src="https://github.com/user-attachments/assets/8de5996d-cee5-465a-bfbc-39bbe5858a23" alt="image">
 </p>
-
 
 #### Pyinstaller
 If you want to compile and generate an executable for the application, this is the command that takes the additional interface files into account.
