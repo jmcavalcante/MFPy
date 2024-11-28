@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ## How to use it
 
 ### Read tir notebook (read_tir.ipynb)
-This notebook teaches you how to read a .tir file that follows the 5.2 protocol. By default, it will read a sample file, but it can be changed to read another file. You can also see some interesting graphs that can be generated from the .tir file, such as the traction circle.
+This notebook  shows you how to read a .tir file that follows the 5.2 protocol using the MFPy. By default, it will read a sample file, but it can be changed to read another .tir file. You can also see some interesting graphs that can be generated from the .tir file, such as the traction circle.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a98af033-2850-41e3-a2e1-b04d16fc1d76" alt="image">
@@ -31,7 +31,7 @@ This notebook teaches you how to read a .tir file that follows the 5.2 protocol.
 
 
 ### Fit tir notebook (read_tir.ipynb)
-This notebook teaches you how to fit a tire test data that following the 5.2 protocol. By default, it will read some samples files, but it can be changed to read another files. It is important to check that for each folder, there is a correct nomenclature for the csv (**with ; as separator**) files that will be inside:
+This notebook  shows you how to fit a tire test data that following the 5.2 protocol using the MFPy. By default, it will read some samples files, but it can be changed to read another files. It is important to check that for each folder, there is a correct nomenclature for the csv (**with ; as separator**) files that will be inside:
 
 - **FX pure slip longitudinal**: FZXXXX_gammaYYYY.csv
     where XXXX means the value for the FZ(N) for this test, and YYYY means the value for the inclination angle (rads) for this test.It doesn't matter how many characters are in XXXX or YYYY.
