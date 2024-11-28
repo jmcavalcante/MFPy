@@ -56,6 +56,10 @@ If you want to recompile and regenerate the executable, this is the command that
 ```bash
 pyinstaller --onefile --noconsole --icon=fit_interface/design/logo.ico --add-data "fit_interface/design;fit_interface/design" --add-data "fit_interface/tir;fit_interface/tir" --distpath . --workpath . --name "MFPy fit" fit_app.py
 ```
+
+### Contact
+
+Feel free to contact me by mail if you have question or open a issues request.
 ### Reference
 > **Tyre and Vehicle Dynamics - 2nd edition**  
 > Author: Hans Pacejka  
