@@ -3,9 +3,9 @@ Using the Magic Formula equations (Tyre and Vehicle Dynamics by Hans Pacejka - s
 
 ## General informations
 
-**All sample files do not represent the actual behaviour of tyres, they are files whose purpose is simply to use the library.**
+Sample files do not represent a real behaviour of tyres, they are files whose purpose is simply to use the library.
 
-**All the equations used can be seen in the file mfpy/equations.py . Next to each one you will find comments and the book reference.**
+All the equations used can be seen in the file **mfpy/equations.py** . Next to each one you will find comments and the book reference.
 
 
 ## Installation and requirements
