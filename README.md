@@ -68,7 +68,7 @@ pyinstaller --onefile --noconsole --icon=fit_interface/design/logo.ico --add-dat
 
 ### Contact
 
-Feel free to contact me by mail if you have question or open a issues request.
+Feel free to contact me by mail if you have a question or open an issue request.
 ### Reference
 > **Tyre and Vehicle Dynamics - 2nd edition**  
 > Author: Hans Pacejka  
