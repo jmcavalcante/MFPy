@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
+__pycache__/
 * text=auto
 *.ipynb linguist-detectable=false
