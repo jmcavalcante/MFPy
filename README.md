@@ -7,6 +7,16 @@ Sample files do not represent a real behaviour of tyres, they are files whose pu
 
 All the equations used can be seen in the file **mfpy/equations.py** . Next to each one you will find comments and the book reference.
 
+All inputs should be in S.I units:
+
+Speed : meter/second
+Force : N
+angle : rad
+length :  meter
+
+for  longitudinal slip ratio:
+slip ratio : %/100 ( 100% should be 1)
+
 
 ## Installation and requirements
 
@@ -47,6 +57,14 @@ This notebook  shows you how to fit a tire test data that following the 5.2 prot
     where XXXX means the value for the FZ(N) for this test,YYYY means the value for the slip ratio (%/100) for this test and KKKK means the value for the inclination angle (rads) .It doesn't matter how many characters are in XXXX or YYYY.
 
 You can always use the files available in the sample folder as an example!
+
+All the .csv files should have the same lenght for each type (FX Pure, FY Pure, MZ Pure,...)!
+
+All .csv files shoud have ";" as delimiter!
+
+For FX, the .csv file must contain 'LSR' and 'FX' as columns.
+For FY, the .csv file must contain 'SA' and 'FY' as columns.
+For MZ, the .csv file must contain 'SA' and 'MZ' as columns.
 
 
 ### Fit interface (fit_app.py or MFPy fit.exe)
