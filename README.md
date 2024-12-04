@@ -78,7 +78,7 @@ The interface follows the same logic as the notebook, for each test you need to 
   <img src="https://github.com/user-attachments/assets/8de5996d-cee5-465a-bfbc-39bbe5858a23" alt="image">
 </p>
 
-The initial guess for the app, is the .tir file in the sample folder, but the user can open another 5.2 tir file, and use it as initial guess.
+The initial guess for the app, is the .tir file in the sample folder, but the user can open another 5.2 tir file and use it as initial guess.
 #### Pyinstaller
 If you want to compile and generate an executable for the application, this is the command that takes the additional interface files into account.
 ```bash
