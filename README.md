@@ -9,13 +9,13 @@ All the equations used can be seen in the file **mfpy/equations.py** . Next to e
 
 All inputs should be in S.I units:
 
-Speed : meter/second
-Force : N
-angle : rad
-length :  meter
+- Speed : meter/second
+- Force : N
+- angle : rad
+- length :  meter
 
 for  longitudinal slip ratio:
-slip ratio : %/100 ( 100% should be 1)
+- slip ratio : %/100 ( 100% should be 1)
 
 
 ## Installation and requirements
