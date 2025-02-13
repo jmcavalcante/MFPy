@@ -73,7 +73,7 @@ For MZ, the .csv file must contain 'SA' and 'MZ' as columns!
 </p>
 
 
-The interface follows the same logic as the notebook, for each test you need to indicate the folder containing the .csv files. However, with an interface, you can better control each parameter of the fit, such as the initial kick, the boundary values and make any corrections before writing the .tir file.
+The interface follows the same logic as the notebook, for each test you need to indicate the folder containing the .csv files. However, with an interface, you can better control each parameter of the fit, such as the initial guess, the boundary values and make any corrections before writing the .tir file.
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8de5996d-cee5-465a-bfbc-39bbe5858a23" alt="image">
 </p>
